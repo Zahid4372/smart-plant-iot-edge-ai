@@ -195,6 +195,6 @@ It demonstrates both theoretical understanding and practical implementation of m
 
 Author
 
-[Your Name]
+Zahid Ul Haq Chaudhary (250259117)
 BSc (Hons) Computer Science
 Level 6 – Internet of Things
