@@ -6,13 +6,13 @@
 #include <DHT.h>
 #include "model_weights.h"
 
-const char* WIFI_SSID = "Galaxy A14 FE30";
-const char* WIFI_PASS = "11111111";
+const char* WIFI_SSID = "$$$$$$$$";
+const char* WIFI_PASS = "$$$$$$$$";
 
 WiFiClient client;
 
-unsigned long CHANNEL_ID = 3225753;
-const char* WRITE_API_KEY = "NFV5FVC0DFB58AYC";
+unsigned long CHANNEL_ID = $$$$$$$;
+const char* WRITE_API_KEY = "$$$$$$$$$$";
 
 const unsigned long TS_INTERVAL_MS = 20000;
 unsigned long lastTsMs = 0;
