@@ -1,13 +1,3 @@
-/*
-  ✅ FINAL COMPLETE PROJECT (UNO R4 WiFi)
-
-  - Sensors: DHT22 + Soil Moisture
-  - Edge AI: Manual NN inference (TinyML-style)
-  - Decision Logic: HARD soil rule + ML confirmation
-  - BLE: Live data to phone (nRF Connect)
-  - Cloud: ThingSpeak (Fields 1–4)
-  - Email: ThingSpeak React (Field 4 == 1)
-*/
 
 #include <Arduino.h>
 #include <WiFiS3.h>
@@ -16,9 +6,6 @@
 #include <DHT.h>
 #include "model_weights.h"
 
-// =====================
-// WIFI / THINGSPEAK
-// =====================
 const char* WIFI_SSID = "Galaxy A14 FE30";
 const char* WIFI_PASS = "11111111";
 
@@ -30,24 +17,21 @@ const char* WRITE_API_KEY = "NFV5FVC0DFB58AYC";
 const unsigned long TS_INTERVAL_MS = 20000;
 unsigned long lastTsMs = 0;
 
-// =====================
 // SENSORS
-// =====================
+
 #define DHTPIN 2
 #define DHTTYPE DHT22
 DHT dht(DHTPIN, DHTTYPE);
 
 const int SOIL_PIN = A0;
 
-// =====================
 // DECISION THRESHOLDS
-// =====================
+
 const int   SOIL_DRY_THRESHOLD = 620;
 const float ML_PROB_THRESHOLD  = 0.00025f;
 
-// =====================
 // BLE
-// =====================
+
 BLEService plantService("19B10000-E8F2-537E-4F6C-D104768A1214");
 
 BLEIntCharacteristic   soilChar      ("19B10001-E8F2-537E-4F6C-D104768A1214", BLERead | BLENotify);
@@ -56,9 +40,8 @@ BLEFloatCharacteristic humChar       ("19B10003-E8F2-537E-4F6C-D104768A1214", BL
 BLEByteCharacteristic  needsWaterChar("19B10004-E8F2-537E-4F6C-D104768A1214", BLERead | BLENotify);
 BLEFloatCharacteristic probChar      ("19B10005-E8F2-537E-4F6C-D104768A1214", BLERead | BLENotify);
 
-// =====================
 // EDGE AI (MANUAL NN)
-// =====================
+
 static inline float relu(float x) { return x > 0 ? x : 0; }
 static inline float sigmoid(float x) { return 1.0f / (1.0f + expf(-x)); }
 
@@ -82,9 +65,9 @@ float modelProb(int soil, float temp, float hum) {
   return sigmoid(out);
 }
 
-// =====================
-// ✅ FIXED HYBRID DECISION LOGIC
-// =====================
+
+// HYBRID DECISION LOGIC
+
 int computeNeedsWater(int soil, float prob) {
   // HARD physical rule first
   if (soil < SOIL_DRY_THRESHOLD) {
@@ -95,9 +78,7 @@ int computeNeedsWater(int soil, float prob) {
   return (prob >= ML_PROB_THRESHOLD) ? 1 : 0;
 }
 
-// =====================
 // WIFI CONNECT
-// =====================
 void connectWiFi() {
   Serial.print("Connecting WiFi");
   while (WiFi.status() != WL_CONNECTED) {
@@ -108,9 +89,7 @@ void connectWiFi() {
   Serial.println("\n✅ WiFi Connected");
 }
 
-// =====================
 // SETUP
-// =====================
 void setup() {
   Serial.begin(9600);
   delay(1500);
@@ -135,9 +114,7 @@ void setup() {
   Serial.println("✅ System Ready (Sensors + Edge AI + BLE + ThingSpeak)");
 }
 
-// =====================
 // LOOP
-// =====================
 void loop() {
   BLE.poll();
 
